@@ -52,18 +52,20 @@ jobs:
 
       - name: Restore keystore
         env:
-          ANDROID_KEY_PROPERTIES: ${{ secrets.ANDROID_KEY_PROPERTIES }}
-          ANDROID_KEY_STORE: ${{ secrets.ANDROID_KEY_STORE }}
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
           mkdir -p app/android
-          echo "$ANDROID_KEY_PROPERTIES" | base64 -di > app/android/key.properties
-          echo "$ANDROID_KEY_STORE" | base64 -di > app/android/android-keystore.jks
-          # Rewrite storeFile to an absolute path so Gradle always finds it
-          # regardless of where key.properties is loaded from.
-          sed -i "s|storeFile=.*|storeFile=$(pwd)/app/android/android-keystore.jks|" app/android/key.properties
-          echo "--- key.properties (storeFile redacted) ---"
-          sed 's|storeFile=.*|storeFile=<absolute-path>|' app/android/key.properties
-          ls -l app/android/android-keystore.jks
+          KEYSTORE_PATH="$(pwd)/app/android/android-keystore.jks"
+          echo "$KEYSTORE_BASE64" | base64 -di > "$KEYSTORE_PATH"
+          printf 'storePassword=%s\nkeyPassword=%s\nkeyAlias=%s\nstoreFile=%s\n' \
+            "$KEYSTORE_PASSWORD" "$KEY_PASSWORD" "$KEY_ALIAS" "$KEYSTORE_PATH" \
+            > app/android/key.properties
+          echo "--- key.properties (passwords redacted) ---"
+          sed 's/Password=.*/Password=<redacted>/' app/android/key.properties
+          ls -l "$KEYSTORE_PATH"
 
       - name: Dependencies
         working-directory: app
