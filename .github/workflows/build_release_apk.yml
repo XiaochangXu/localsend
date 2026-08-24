@@ -80,11 +80,22 @@ jobs:
         working-directory: app
         run: flutter build apk --target-platform android-arm64
 
+      - name: Verify APK exists
+        working-directory: app
+        run: |
+          APK_PATH="build/app/outputs/flutter-apk/app-release.apk"
+          if [ ! -f "$APK_PATH" ]; then
+            echo "ERROR: APK not found at $APK_PATH"
+            ls -la build/app/outputs/flutter-apk/ || true
+            exit 1
+          fi
+          echo "APK found: $APK_PATH ($(du -h "$APK_PATH" | cut -f1))"
+
       - name: Upload APK to Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.event.inputs.version }}
-          files: app/build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
+          files: app/build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -92,4 +103,4 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: apk-arm64-v8a-release
-          path: app/build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
+          path: app/build/app/outputs/flutter-apk/app-release.apk
