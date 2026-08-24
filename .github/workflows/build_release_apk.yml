@@ -42,15 +42,28 @@ jobs:
         with:
           toolchain: stable
 
+      - name: Add Android NDK target
+        run: rustup target add aarch64-linux-android
+
+      - name: Rust cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: "packages/core -> target packages/localsend_isolates/rust -> target"
+
       - name: Restore keystore
         env:
           ANDROID_KEY_PROPERTIES: ${{ secrets.ANDROID_KEY_PROPERTIES }}
           ANDROID_KEY_STORE: ${{ secrets.ANDROID_KEY_STORE }}
         run: |
+          mkdir -p app/android
           echo "$ANDROID_KEY_PROPERTIES" | base64 -di > app/android/key.properties
-          mkdir -p secrets
-          echo "$ANDROID_KEY_STORE" | base64 -di > secrets/android-keystore.jks
-          ls -l app/android/key.properties secrets/android-keystore.jks
+          echo "$ANDROID_KEY_STORE" | base64 -di > app/android/android-keystore.jks
+          # Rewrite storeFile to an absolute path so Gradle always finds it
+          # regardless of where key.properties is loaded from.
+          sed -i "s|storeFile=.*|storeFile=$(pwd)/app/android/android-keystore.jks|" app/android/key.properties
+          echo "--- key.properties (storeFile redacted) ---"
+          sed 's|storeFile=.*|storeFile=<absolute-path>|' app/android/key.properties
+          ls -l app/android/android-keystore.jks
 
       - name: Dependencies
         working-directory: app
