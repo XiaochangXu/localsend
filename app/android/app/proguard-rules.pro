@@ -155,3 +155,12 @@
     public static **[] values();
     public static ** valueOf(java.lang.String);
 }
+
+# ===== Google Play Core 缺失类修复 =====
+# Flutter 引擎内部（FlutterPlayStoreSplitApplication、PlayStoreDeferredComponentManager）
+# 引用了 com.google.android.play.core.* 类，用于 Play Store 的 Deferred Components 功能。
+# LocalSend 不使用该功能且未引入 Play Core 依赖，R8 在 minify 阶段会因找不到这些类而报错。
+# 告诉 R8 这些缺失类是预期的，不要报错。
+-dontwarn com.google.android.play.core.splitcompat.**
+-dontwarn com.google.android.play.core.splitinstall.**
+-dontwarn com.google.android.play.core.tasks.**
