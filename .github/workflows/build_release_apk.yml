@@ -66,6 +66,11 @@ jobs:
           echo "--- key.properties (passwords redacted) ---"
           sed 's/Password=.*/Password=<redacted>/' app/android/key.properties
           ls -l "$KEYSTORE_PATH"
+          file "$KEYSTORE_PATH"
+          echo "--- Verifying keystore with keytool ---"
+          keytool -list -keystore "$KEYSTORE_PATH" \
+            -storepass "$KEYSTORE_PASSWORD" \
+            -alias "$KEY_ALIAS" 2>&1 || true
 
       - name: Dependencies
         working-directory: app
