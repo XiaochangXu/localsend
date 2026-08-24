@@ -7,7 +7,7 @@ DMG="LocalSend-$VERSION.dmg"
 cd app
 fvm flutter clean
 fvm flutter pub get
-fvm flutter build macos
+fvm flutter build macos --obfuscate --split-debug-info=build/symbols
 
 # sign the app
 echo

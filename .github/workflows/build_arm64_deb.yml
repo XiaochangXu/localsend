@@ -52,6 +52,18 @@ jobs:
       - name: Enable dart_distributor
         run: dart pub global activate flutter_distributor
 
+      - name: Dependencies
+        working-directory: app
+        run: flutter pub get
+
+      - name: Generate i18n code (slang)
+        working-directory: app
+        run: dart run slang
+
+      - name: Generate code (build_runner)
+        working-directory: app
+        run: dart run build_runner build -d
+
       - name: Build deb package
         working-directory: app
         run: PATH="$PATH:$HOME/.pub-cache/bin" flutter_distributor package --platform linux --targets deb

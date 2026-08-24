@@ -5,7 +5,7 @@
 cd app
 fvm flutter clean
 fvm flutter pub get
-fvm flutter build appbundle
+fvm flutter build appbundle --obfuscate --split-debug-info=build/symbols
 cd ..
 
 Write-Output 'Generated Android Appbundle!'

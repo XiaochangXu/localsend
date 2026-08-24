@@ -6,7 +6,7 @@ cd app
 
 fvm flutter clean
 fvm flutter pub get
-fvm flutter build windows
+fvm flutter build windows --obfuscate --split-debug-info=build/symbols
 
 Remove-Item "D:\inno" -Force  -Recurse -ErrorAction SilentlyContinue
 New-Item -ItemType Directory -Force -Path "D:\inno"

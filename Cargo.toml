@@ -20,3 +20,8 @@ opt-level = 2
 
 [profile.dev.package.num-bigint-dig]
 opt-level = 2
+
+# Release: strip debug symbols and enable LTO for smaller binaries.
+[profile.release]
+strip = true
+lto = true

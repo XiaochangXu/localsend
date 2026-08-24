@@ -5,6 +5,7 @@
 fvm flutter clean
 fvm flutter pub get
 fvm dart run build_runner build -d
+fvm flutter build windows --obfuscate --split-debug-info=build/symbols
 fvm flutter pub run msix:create --store
 
 Move-Item -Path build/windows/x64/runner/Release/localsend_app.msix -Destination LocalSend-XXX-windows-x86-64-store.msix

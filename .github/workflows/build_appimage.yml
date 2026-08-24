@@ -32,6 +32,10 @@ jobs:
         working-directory: app
         run: flutter pub get
 
+      - name: Generate i18n code (slang)
+        working-directory: app
+        run: dart run slang
+
       - name: Build generated files
         working-directory: app
         run: dart run build_runner build -d

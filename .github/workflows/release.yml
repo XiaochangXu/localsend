@@ -74,9 +74,17 @@ jobs:
         working-directory: ${{ env.APK_BUILD_DIR }}/app
         run: flutter pub get
 
+      - name: Generate i18n code (slang)
+        working-directory: ${{ env.APK_BUILD_DIR }}/app
+        run: dart run slang
+
+      - name: Generate code (build_runner)
+        working-directory: ${{ env.APK_BUILD_DIR }}/app
+        run: dart run build_runner build -d
+
       - name: Build APK
         working-directory: ${{ env.APK_BUILD_DIR }}/app
-        run: flutter build apk --split-per-abi
+        run: flutter build apk --split-per-abi --obfuscate --split-debug-info=build/symbols
 
       - name: Upload APK
         uses: actions/upload-artifact@v6
@@ -117,9 +125,17 @@ jobs:
         working-directory: app
         run: flutter pub get
 
+      - name: Generate i18n code (slang)
+        working-directory: app
+        run: dart run slang
+
+      - name: Generate code (build_runner)
+        working-directory: app
+        run: dart run build_runner build -d
+
       - name: Compile linux
         working-directory: app
-        run: flutter build linux
+        run: flutter build linux --obfuscate --split-debug-info=build/symbols
 
       - name: Create tar.gz archive
         run: |
@@ -164,9 +180,17 @@ jobs:
         working-directory: app
         run: flutter pub get
 
+      - name: Generate i18n code (slang)
+        working-directory: app
+        run: dart run slang
+
+      - name: Generate code (build_runner)
+        working-directory: app
+        run: dart run build_runner build -d
+
       - name: Compile linux
         working-directory: app
-        run: flutter build linux
+        run: flutter build linux --obfuscate --split-debug-info=build/symbols
 
       - name: Create tar.gz archive
         run: |
@@ -210,6 +234,18 @@ jobs:
 
       - name: Update PATH
         run: echo 'export PATH="$PATH:$HOME/.pub-cache/bin"' >> ~/.bashrc
+
+      - name: Dependencies
+        working-directory: app
+        run: flutter pub get
+
+      - name: Generate i18n code (slang)
+        working-directory: app
+        run: dart run slang
+
+      - name: Generate code (build_runner)
+        working-directory: app
+        run: dart run build_runner build -d
 
       - name: Build deb package
         working-directory: app
@@ -267,6 +303,18 @@ jobs:
       - name: Enable dart_distributor
         run: dart pub global activate flutter_distributor
 
+      - name: Dependencies
+        working-directory: app
+        run: flutter pub get
+
+      - name: Generate i18n code (slang)
+        working-directory: app
+        run: dart run slang
+
+      - name: Generate code (build_runner)
+        working-directory: app
+        run: dart run build_runner build -d
+
       - name: Build deb package
         working-directory: app
         run: PATH="$PATH:$HOME/.pub-cache/bin" flutter_distributor package --platform linux --targets deb
@@ -322,9 +370,17 @@ jobs:
         working-directory: app
         run: flutter pub get
 
+      - name: Generate i18n code (slang)
+        working-directory: app
+        run: dart run slang
+
+      - name: Generate code (build_runner)
+        working-directory: app
+        run: dart run build_runner build -d
+
       - name: Compile linux
         working-directory: app
-        run: flutter build linux
+        run: flutter build linux --obfuscate --split-debug-info=build/symbols
 
       - name: Copy compiled linux files
         run: |
@@ -382,9 +438,17 @@ jobs:
         working-directory: app
         run: flutter pub get
 
+      - name: Generate i18n code (slang)
+        working-directory: app
+        run: dart run slang
+
+      - name: Generate code (build_runner)
+        working-directory: app
+        run: dart run build_runner build -d
+
       - name: Compile for Windows
         working-directory: app
-        run: flutter build windows
+        run: flutter build windows --obfuscate --split-debug-info=build/symbols
 
       - name: Create empty settings.json
         working-directory: app
@@ -490,9 +554,17 @@ jobs:
         working-directory: app
         run: flutter pub get
 
+      - name: Generate i18n code (slang)
+        working-directory: app
+        run: dart run slang
+
+      - name: Generate code (build_runner)
+        working-directory: app
+        run: dart run build_runner build -d
+
       - name: Compile for Windows
         working-directory: app
-        run: flutter build windows
+        run: flutter build windows --obfuscate --split-debug-info=build/symbols
 
       - name: Create empty settings.json
         working-directory: app

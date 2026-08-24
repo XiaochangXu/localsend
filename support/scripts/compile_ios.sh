@@ -10,5 +10,5 @@ fvm flutter precache --ios
 	cd ios
 	pod update
 )
-fvm flutter build ipa
+fvm flutter build ipa --obfuscate --split-debug-info=build/symbols
 cd ..

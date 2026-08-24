@@ -55,6 +55,18 @@ jobs:
           echo "PATH: $PATH"
           command -v flutter_distributor || echo "flutter_distributor not found"
 
+      - name: Dependencies
+        working-directory: app
+        run: flutter pub get
+
+      - name: Generate i18n code (slang)
+        working-directory: app
+        run: dart run slang
+
+      - name: Generate code (build_runner)
+        working-directory: app
+        run: dart run build_runner build -d
+
       - name: Build rpm package
         working-directory: app
         run: FLUTTER_ROOT=/opt/hostedtoolcache/flutter/stable-${{ env.FLUTTER_VERSION }}-x64 flutter_distributor package --platform linux --targets rpm

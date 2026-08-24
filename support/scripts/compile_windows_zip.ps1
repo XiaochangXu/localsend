@@ -6,7 +6,7 @@ cd app
 
 fvm flutter clean
 fvm flutter pub get
-fvm flutter build windows
+fvm flutter build windows --obfuscate --split-debug-info=build/symbols
 
 Compress-Archive -Path build/windows/x64/runner/Release/* -DestinationPath LocalSend-XXX-windows-x86-64.zip
 
