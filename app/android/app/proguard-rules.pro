@@ -164,3 +164,23 @@
 -dontwarn com.google.android.play.core.splitcompat.**
 -dontwarn com.google.android.play.core.splitinstall.**
 -dontwarn com.google.android.play.core.tasks.**
+-dontwarn com.google.android.play.core.assetpacks.**
+
+# ===== Android Predictive Back Gesture 缺失类修复 =====
+# Flutter 引擎的 FlutterActivity 引用了 android.window.BackEvent（Android 13+ API）。
+# 项目 minSdkVersion 为 21，低于 API 33，R8 在 minify 阶段会因找不到该类而报错。
+-dontwarn android.window.BackEvent
+-dontwarn android.window.OnBackInvokedDispatcher
+-dontwarn android.window.OnBackInvokedCallback
+
+# ===== 常见第三方库注解缺失类预防 =====
+# 部分依赖库引用了编译时注解（如 errorprone、jsr305），运行时不需要这些类。
+-dontwarn javax.annotation.**
+-dontwarn org.checkerframework.**
+-dontwarn com.google.errorprone.**
+
+# ===== Android hidden API / 内部类预防 =====
+# 部分 SDK 在高版本 compileSdk 下引用了非公开 API，R8 可能报缺失。
+-dontwarn android.provider.DeviceConfig
+-dontwarn dalvik.system.BlockGuard$**
+-dontwarn dalvik.system.CloseGuard
